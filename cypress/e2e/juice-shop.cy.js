@@ -1,40 +1,72 @@
 import { HomePage } from "../pageObjects/HomePage";
+import { LoginPage } from "../pageObjects/LoginPage";
+import { RegisterPage } from "../pageObjects/RegisterPage";
 
 describe("Juice-shop scenarios", () => {
   context("Without auto login", () => {
     beforeEach(() => {
       HomePage.visit();
       HomePage.dismissButton.click();
-      HomePage.meWantItButton.click();
+      //HomePage.meWantItButton.click();
     });
 
     it("Login", () => {
       // Click Account button
+      HomePage.accountBtn.click();
       // Click Login button
+      HomePage.loginBtn.click();
       // Set email value to "demo"
+      LoginPage.emailField.type("demo");
       // Set password value to "demo"
+      LoginPage.passwordField.type("demo");
       // Click Log in
+      LoginPage.logInBtn.click();
       // Click Account button
+      HomePage.accountBtn.click();
       // Validate that "demo" account name appears in the menu section
+      HomePage.accountMenu.should(
+        "contain.text",
+        "demo"
+      );
     });
 
-    it("Registration", () => {
+    it.only("Registration", () => {
       // Click Account button
+      HomePage.accountBtn.click();
       // Login button
+      HomePage.loginBtn.click();
       // Click "Not yet a customer?"
+      LoginPage.newUserBtn.click();
       // Find - how to generate random number in JS
       // Use that number to genarate unique email address, e.g.: email_7584@ebox.com
       // Save that email address to some variable
+      RegisterPage.generateUniqueEmail();
+      RegisterPage.emailField.type(RegisterPage.uniqueEmail);
       // Fill in password field and repeat password field with same password
+      let password = "SuperS4fePa55word!";
+      RegisterPage.passwordField.type(password);
+      RegisterPage.repeatPasswordField.type(password);
       // Click on Security Question menu
+      RegisterPage.securityQnMenu.click();
       // Select  "Name of your favorite pet?"
+      RegisterPage.findSecurityQnByName("Name of your favorite pet?").click();
       // Fill in answer
+      RegisterPage.securityQnAnswer.type("mr lamp");
       // Click Register button
+      RegisterPage.registerBtn.click();
       // Set email value to previously created email
+      LoginPage.emailField.type(RegisterPage.uniqueEmail);
       // Set password value to previously used password value
+      LoginPage.passwordField.type(password);
       // Click login button
+      LoginPage.logInBtn.click();
       // Click Account button
+      HomePage.accountBtn.click();
       // Validate that account name (with previously created email address) appears in the menu section
+      HomePage.accountMenu.should(
+        "contain.text",
+        RegisterPage.uniqueEmail
+      );
     });
   });
 
