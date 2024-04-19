@@ -24,4 +24,12 @@ export class HomePage extends BasePage {
   static get accountMenu() {
     return cy.get("[aria-label='Go to user profile']");
   }
+
+  static get searchIcon() {
+    return cy.get("#searchQuery");
+  }
+
+  static get searchInput() {
+    return HomePage.searchIcon.find("input");
+  }
 }
